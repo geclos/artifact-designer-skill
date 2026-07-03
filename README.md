@@ -7,21 +7,22 @@ The skill does not depend on Pi. It stores generated artifacts in `.artifacts/<i
 ## Contents
 
 ```text
-SKILL.md
-references/
-  artifact-theme.css
-  artifact-template.html
-  design-system.md
-scripts/
-  artifact.mjs
+artifact-designer/
+  SKILL.md
+  references/
+    artifact-theme.css
+    artifact-template.html
+    design-system.md
+  scripts/
+    artifact.mjs
 ```
 
 ## Quick use
 
 ```bash
-node scripts/artifact.mjs create --title "Migration Dashboard" --instructions "Summarize the migration plan" --kind dashboard
-node scripts/artifact.mjs validate --id migration-dashboard --strict
-node scripts/artifact.mjs preview --id migration-dashboard --open
+node artifact-designer/scripts/artifact.mjs create --title "Migration Dashboard" --instructions "Summarize the migration plan" --kind dashboard
+node artifact-designer/scripts/artifact.mjs validate --id migration-dashboard --strict
+node artifact-designer/scripts/artifact.mjs preview --id migration-dashboard --open
 ```
 
 Edit the generated source file:
@@ -38,6 +39,6 @@ The skill checks for design guidance in this order:
 2. User: `~/.artifact-designer/DESIGN.md`
 3. Built-in: `references/design-system.md` and `references/artifact-theme.css`
 
-## Packaging
+## Installation
 
-Package this directory as a skill with your harness's skill packager, or copy the directory into any agent harness that supports skill folders.
+Install this repository with `npx skills add geclos/artifact-designer-skill --skill artifact-designer`. The installable skill lives in `artifact-designer/` so supporting files are copied with `SKILL.md`.
