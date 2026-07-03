@@ -12,11 +12,37 @@ This skill supports two modes:
 1. **Harness-tool mode**: if tools such as `artifact_create`, `artifact_validate`, `artifact_preview`, `artifact_publish`, `artifact_import_url`, `artifact_list`, or `artifact_open` are available, use them.
 2. **Portable mode**: in any harness with filesystem + shell access, use `scripts/artifact.mjs` from this skill directory.
 
-Artifacts live under the current project at `.artifacts/<id>/` so the same directory layout works in Claude Code, Cursor-like harnesses, and generic coding agents.
+New artifacts live under the current project at `.artifacts/<id>/` so the same directory layout works in Claude Code, Cursor-like harnesses, and generic coding agents.
+
+Important: when the user points to an existing HTML file and asks to preview, validate, or publish it, operate on that file directly. Do not scaffold a new artifact, do not copy the HTML into `.artifacts/`, and do not rewrite it into the Artifact UI template unless the user explicitly asks to convert or redesign it.
 
 ## Workflow
 
-### 1. Scaffold
+### 0. Existing HTML file fast path
+
+If the user says something like "publish this HTML", "publish `dist/report.html`", "preview `/tmp/page.html`", or otherwise points at an existing `.html`/`.htm` file, use this path instead of scaffolding.
+
+Validate the file directly:
+
+```bash
+node <skill-dir>/scripts/artifact.mjs validate --file path/to/file.html --strict
+```
+
+Preview it directly:
+
+```bash
+node <skill-dir>/scripts/artifact.mjs preview --file path/to/file.html --open
+```
+
+Publish it directly:
+
+```bash
+node <skill-dir>/scripts/artifact.mjs publish --file path/to/file.html --target temporary
+```
+
+Use `--name <worker-name>` if the user wants a stable Worker name. The helper may create temporary deployment staging internally, but it must not create a durable `.artifacts/<id>/` wrapper for an existing HTML file.
+
+### 1. Scaffold only for new artifacts
 
 If artifact tools are available:
 
@@ -81,6 +107,8 @@ node <skill-dir>/scripts/artifact.mjs validate --id <id> --strict
 
 Fix validation errors before previewing or publishing. Warnings are acceptable only when they are intentional and explained.
 
+For `--file` validation, do not enforce Artifact UI/design-system requirements. Existing HTML may be a hand-written page, generated report, or app export that intentionally does not use `.artifact-*` classes or bundled design tokens. File validation should focus on publish safety and platform constraints: file exists, size limits, and risky external/runtime network dependencies. Design-system checks apply only to artifacts this skill scaffolds under `.artifacts/<id>/`.
+
 ### 4. Preview
 
 If harness tools are available, use `artifact_preview` or `artifact_open`.
@@ -97,13 +125,19 @@ If the harness cannot open a browser, report the local URL printed by the script
 
 Do not publish by default. Ask/confirm before making a public URL.
 
-If harness tools are available:
+For an existing HTML file, publish the file directly even if artifact-scaffolding tools are available:
+
+```bash
+node <skill-dir>/scripts/artifact.mjs publish --file path/to/file.html --target temporary
+```
+
+For an artifact created under `.artifacts/<id>/`, publish by id. If harness tools are available and they support publishing by id, use them:
 
 ```text
 artifact_publish({ id: "<id>", target: "cloudflare-temporary", confirmPublic: true })
 ```
 
-Portable mode:
+Portable mode for an artifact id:
 
 ```bash
 node <skill-dir>/scripts/artifact.mjs publish --id <id> --target temporary
@@ -118,8 +152,11 @@ From this skill directory:
 ```bash
 node scripts/artifact.mjs create --title "Title" [--instructions "..."] [--kind report] [--id slug] [--format html|md]
 node scripts/artifact.mjs validate --id slug [--strict]
+node scripts/artifact.mjs validate --file path/to/file.html [--strict]
 node scripts/artifact.mjs preview --id slug [--open]
+node scripts/artifact.mjs preview --file path/to/file.html [--open]
 node scripts/artifact.mjs publish --id slug [--target temporary|permanent] [--domain example.com]
+node scripts/artifact.mjs publish --file path/to/file.html [--target temporary|permanent] [--domain example.com] [--name worker-name]
 node scripts/artifact.mjs list
 node scripts/artifact.mjs import-url --url https://... [--title "Title"] [--id slug]
 ```

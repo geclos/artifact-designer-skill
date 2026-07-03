@@ -19,6 +19,8 @@ artifact-designer/
 
 ## Quick use
 
+Create a new artifact:
+
 ```bash
 node artifact-designer/scripts/artifact.mjs create --title "Migration Dashboard" --instructions "Summarize the migration plan" --kind dashboard
 node artifact-designer/scripts/artifact.mjs validate --id migration-dashboard --strict
@@ -30,6 +32,15 @@ Edit the generated source file:
 ```text
 .artifacts/<id>/source/index.html
 ```
+
+Publish an existing HTML file directly, without creating a `.artifacts/` wrapper:
+
+```bash
+node artifact-designer/scripts/artifact.mjs validate --file dist/report.html --strict
+node artifact-designer/scripts/artifact.mjs publish --file dist/report.html --target temporary
+```
+
+Direct file validation does not enforce Artifact UI classes or design tokens. It checks publish safety and platform constraints instead.
 
 ## Design overrides
 
