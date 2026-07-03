@@ -4,6 +4,16 @@ Turn an agent into a small publishing studio for HTML artifacts.
 
 This skill helps coding agents create, polish, preview, validate, and publish self-contained HTML pages: dashboards, reports, timelines, decision docs, benchmark viewers, prototypes, and walkthroughs.
 
+## Installation
+
+Install the skill into a compatible agent harness:
+
+```bash
+npx skills add geclos/artifact-designer-skill --skill artifact-designer
+```
+
+Then ask your agent to create, preview, validate, or publish an artifact.
+
 ## What it is for
 
 Use this skill when you want an agent to:
@@ -67,13 +77,3 @@ You can override the design guidance with Markdown:
 .artifacts/DESIGN.md              # project override
 ~/.artifact-designer/DESIGN.md    # user default
 ```
-
-## Installation
-
-Install the skill into a compatible agent harness:
-
-```bash
-npx skills add geclos/artifact-designer-skill --skill artifact-designer
-```
-
-Then ask your agent to create, preview, validate, or publish an artifact.
