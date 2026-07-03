@@ -1,10 +1,10 @@
 # artifact-designer-skill
 
-Portable, harness-independent skill for creating polished, self-contained HTML artifacts.
+Portable skill for creating, validating, previewing, and publishing HTML artifacts.
 
-The skill does not depend on Pi. It stores generated artifacts in `.artifacts/<id>/` and includes a Node.js helper for scaffolding, validation, local preview, import, listing, and optional Cloudflare Workers publishing.
+It does not depend on Pi. New artifacts use `.artifacts/<id>/`. Existing HTML files can be validated, previewed, and published directly with `--file`.
 
-## Contents
+## Layout
 
 ```text
 artifact-designer/
@@ -17,9 +17,7 @@ artifact-designer/
     artifact.mjs
 ```
 
-## Quick use
-
-Create a new artifact:
+## New artifact
 
 ```bash
 node artifact-designer/scripts/artifact.mjs create --title "Migration Dashboard" --instructions "Summarize the migration plan" --kind dashboard
@@ -27,29 +25,30 @@ node artifact-designer/scripts/artifact.mjs validate --id migration-dashboard --
 node artifact-designer/scripts/artifact.mjs preview --id migration-dashboard --open
 ```
 
-Edit the generated source file:
+Edit:
 
 ```text
 .artifacts/<id>/source/index.html
 ```
 
-Publish an existing HTML file directly, without creating a `.artifacts/` wrapper:
+## Existing HTML file
 
 ```bash
 node artifact-designer/scripts/artifact.mjs validate --file dist/report.html --strict
+node artifact-designer/scripts/artifact.mjs preview --file dist/report.html --open
 node artifact-designer/scripts/artifact.mjs publish --file dist/report.html --target temporary
 ```
 
-Direct file validation does not enforce Artifact UI classes or design tokens. It checks publish safety and platform constraints instead.
+Direct file validation does not require Artifact UI classes or design tokens.
 
 ## Design overrides
 
-The skill checks for design guidance in this order:
-
 1. Project: `.artifacts/DESIGN.md`
 2. User: `~/.artifact-designer/DESIGN.md`
-3. Built-in: `references/design-system.md` and `references/artifact-theme.css`
+3. Built-in: `artifact-designer/references/design-system.md`
 
 ## Installation
 
-Install this repository with `npx skills add geclos/artifact-designer-skill --skill artifact-designer`. The installable skill lives in `artifact-designer/` so supporting files are copied with `SKILL.md`.
+```bash
+npx skills add geclos/artifact-designer-skill --skill artifact-designer
+```
