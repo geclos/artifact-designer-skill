@@ -2,7 +2,7 @@
 
 Portable skill for creating, validating, previewing, and publishing HTML artifacts.
 
-It does not depend on Pi. New artifacts use `.artifacts/<id>/`. Existing HTML files can be validated, previewed, and published directly with `--file`.
+New artifacts use `.artifacts/<id>/`. Existing HTML files can be validated, previewed, and published directly with `--file`.
 
 ## Layout
 
