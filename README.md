@@ -4,8 +4,6 @@ Turn an agent into a small publishing studio for HTML artifacts.
 
 This skill helps coding agents create, polish, preview, validate, and publish self-contained HTML pages: dashboards, reports, timelines, decision docs, benchmark viewers, prototypes, and walkthroughs.
 
-It is also designed for a common fast path: if you already have an HTML file, the agent should publish that file directly instead of rebuilding it or wrapping it in a new project.
-
 ## What it is for
 
 Use this skill when you want an agent to:
